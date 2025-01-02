@@ -64,8 +64,8 @@ def main():
 
             # User input for selecting prediction years
             st.markdown("### Predict Future Inflation Rates")
-            start_year = st.slider("Select starting year for prediction:", min_value=2023, max_value=2040, value=2023)
-            end_year = st.slider("Select ending year for prediction:", min_value=2024, max_value=2041, value=2024)
+            start_year = st.slider("Select starting year for prediction:", min_value=2024, max_value=2050, value=2024)
+            end_year = st.slider("Select ending year for prediction:", min_value=2025, max_value=2051, value=2025)
 
             # Create future years for prediction
             future_years = pd.DataFrame({'Year': range(start_year, end_year + 1)})
