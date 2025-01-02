@@ -41,8 +41,12 @@ def main():
         st.subheader("Model Evaluation")
         st.write(f"Mean Squared Error: {mse}")
 
-        # Predict future inflation rates
-        future_years = pd.DataFrame({'Year': range(2025, 2031)})
+        # User input for selecting prediction years
+        start_year = st.slider("Select starting year for prediction:", min_value=2025, max_value=2030, value=2025)
+        end_year = st.slider("Select ending year for prediction:", min_value=2026, max_value=2031, value=2030)
+
+        # Create future years for prediction
+        future_years = pd.DataFrame({'Year': range(start_year, end_year + 1)})
         future_predictions = model.predict(future_years)
 
         # Display predictions
@@ -69,4 +73,4 @@ def main():
         st.warning("Please upload a CSV file to proceed.")
 
 if __name__ == "__main__":
-    main() 
+    main()
