@@ -10,9 +10,11 @@ import streamlit as st
 def main():
     st.title("Pakistan Inflation Rate Prediction")
 
-    # Load the dataset
-    file_path = "Pakistan Inflation Rate 1960 to 2024.csv"
-    data = pd.read_csv(file_path)
+    # File upload
+    uploaded_file = st.file_uploader("Upload the inflation dataset (CSV format)", type="csv")
+    if uploaded_file is not None:
+        data = pd.read_csv(uploaded_file)
+
 
     # Clean and preprocess the data
     data['Inflation Rate (%)'] = data['Inflation Rate (%)'].str.replace('%', '').astype(float)
