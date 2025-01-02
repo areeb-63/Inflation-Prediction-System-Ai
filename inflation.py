@@ -1,3 +1,11 @@
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
+import matplotlib.pyplot as plt
+import streamlit as st
+
 # Streamlit app
 def main():
     st.title("Pakistan Inflation Rate Prediction")
@@ -16,17 +24,14 @@ def main():
         st.subheader("Dataset")
         st.write(data)
 
-        # Proceed with the rest of the logic (model training, predictions, visualization, etc.)
+        # Prepare features and target
         X = data[['Year']]
         y = data['Inflation Rate (%)']
-        
-        # Split the data
-        from sklearn.model_selection import train_test_split
-        from sklearn.linear_model import LinearRegression
-        from sklearn.metrics import mean_squared_error
+
+        # Split the data into training and testing sets
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-        # Train the model
+        # Train a Linear Regression model
         model = LinearRegression()
         model.fit(X_train, y_train)
 
@@ -36,7 +41,7 @@ def main():
         st.subheader("Model Evaluation")
         st.write(f"Mean Squared Error: {mse}")
 
-        # Future predictions
+        # Predict future inflation rates
         future_years = pd.DataFrame({'Year': range(2025, 2031)})
         future_predictions = model.predict(future_years)
 
@@ -49,7 +54,6 @@ def main():
         st.write(predictions_df)
 
         # Visualization
-        import matplotlib.pyplot as plt
         st.subheader("Visualization")
         plt.figure(figsize=(10, 6))
         plt.scatter(data['Year'], data['Inflation Rate (%)'], color='blue', label='Actual Data')
