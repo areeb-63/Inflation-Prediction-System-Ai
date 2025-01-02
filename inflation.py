@@ -9,20 +9,27 @@ import streamlit as st
 
 # Streamlit app
 def main():
-    st.title("Pakistan Inflation Rate Prediction")
+    st.title("Inflation Rate Prediction for Pakistan")
+
+    st.markdown("""
+    **Welcome to the Inflation Rate Prediction tool!**
+    This app uses a linear regression model to predict future inflation rates in Pakistan based on historical data.
+    Please upload the inflation dataset in CSV format to get started.
+    """)
 
     # File upload
-    uploaded_file = st.file_uploader("Upload the inflation dataset (CSV format)", type="csv")
+    uploaded_file = st.file_uploader("Upload your inflation dataset (CSV format)", type="csv")
+    
     if uploaded_file is not None:
         # Load the dataset
         data = pd.read_csv(uploaded_file)
 
-        # Clean and preprocess the data
+        # Data preprocessing
         data['Inflation Rate (%)'] = data['Inflation Rate (%)'].str.replace('%', '').astype(float)
         data['Year'] = data['Year'].astype(int)
 
         # Display the dataset
-        st.subheader("Dataset")
+        st.subheader("Dataset Overview")
         st.write(data)
 
         # Prepare features and target
@@ -39,10 +46,15 @@ def main():
         # Evaluate the model
         y_pred = model.predict(X_test)
         mse = mean_squared_error(y_test, y_pred)
+
         st.subheader("Model Evaluation")
-        st.write(f"Mean Squared Error: {mse}")
+        st.write(f"Mean Squared Error (MSE): {mse:.2f}")
+        st.write("""
+        The Mean Squared Error (MSE) indicates how well the model is performing. A lower MSE value indicates a better fit.
+        """)
 
         # User input for selecting prediction years
+        st.markdown("### Predict Future Inflation Rates")
         start_year = st.slider("Select starting year for prediction:", min_value=2023, max_value=2040, value=2023)
         end_year = st.slider("Select ending year for prediction:", min_value=2024, max_value=2041, value=2024)
 
@@ -55,16 +67,17 @@ def main():
             'Year': future_years['Year'],
             'Predicted Inflation Rate (%)': future_predictions
         })
-        st.subheader("Future Predictions")
+        st.subheader("Future Inflation Predictions")
         st.write(predictions_df)
 
         # Visualization
-        st.subheader("Choose the type of visualization:")
-        plot_type = st.selectbox("Select Plot Type", ["Line Graph", "Bar Graph", "Heatmap"])
+        st.subheader("Choose Visualization Type")
+        plot_type = st.selectbox("Select Plot Type", ["Line Graph", "Bar Graph", "Correlation Heatmap"])
 
         # Create the plot based on user selection
         if plot_type == "Line Graph":
             # Line graph of actual vs predicted inflation rate
+            st.markdown("### Inflation Rate Trend (Line Graph)")
             plt.figure(figsize=(10, 6))
             plt.plot(data['Year'], data['Inflation Rate (%)'], color='blue', label='Actual Inflation Rate')
             plt.plot(data['Year'], model.predict(data[['Year']]), color='red', label='Trend Line')
@@ -76,6 +89,7 @@ def main():
 
         elif plot_type == "Bar Graph":
             # Bar graph of actual vs predicted inflation rate for future years
+            st.markdown("### Inflation Rate Prediction (Bar Graph)")
             plt.figure(figsize=(10, 6))
             plt.bar(data['Year'], data['Inflation Rate (%)'], color='blue', label='Actual Data')
             plt.bar(future_years['Year'], future_predictions, color='green', alpha=0.5, label='Predicted Data')
@@ -85,9 +99,9 @@ def main():
             plt.legend()
             st.pyplot(plt)
 
-        elif plot_type == "Heatmap":
+        elif plot_type == "Correlation Heatmap":
             # Heatmap of the correlation matrix (useful if there are more features in the future)
-            st.subheader("Correlation Heatmap")
+            st.markdown("### Correlation Heatmap")
             # Select only numeric columns for the correlation matrix
             numeric_data = data.select_dtypes(include=[np.number])
             
@@ -99,10 +113,9 @@ def main():
 
             # Create heatmap
             plt.figure(figsize=(8, 6))
-            sns.heatmap(corr_matrix, annot=True, cmap="coolwarm", fmt=".2f")
+            sns.heatmap(corr_matrix, annot=True, cmap="coolwarm", fmt=".2f", cbar_kws={'label': 'Correlation'})
             plt.title('Correlation Heatmap')
             st.pyplot(plt)
-
 
     else:
         st.warning("Please upload a CSV file to proceed.")
