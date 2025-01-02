@@ -88,11 +88,21 @@ def main():
         elif plot_type == "Heatmap":
             # Heatmap of the correlation matrix (useful if there are more features in the future)
             st.subheader("Correlation Heatmap")
-            corr_matrix = data.corr()
+            # Select only numeric columns for the correlation matrix
+            numeric_data = data.select_dtypes(include=[np.number])
+            
+            # Check for NaN values and handle them
+            numeric_data = numeric_data.fillna(numeric_data.mean())  # Filling NaN with mean value
+            
+            # Calculate correlation matrix
+            corr_matrix = numeric_data.corr()
+
+            # Create heatmap
             plt.figure(figsize=(8, 6))
             sns.heatmap(corr_matrix, annot=True, cmap="coolwarm", fmt=".2f")
             plt.title('Correlation Heatmap')
             st.pyplot(plt)
+
 
     else:
         st.warning("Please upload a CSV file to proceed.")
