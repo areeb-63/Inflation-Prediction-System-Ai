@@ -40,7 +40,7 @@ def main():
                 country_data = country_data.set_index('country_name').transpose().reset_index()
                 country_data.columns = ['Year', 'Inflation Rate (%)']
                 country_data['Year'] = country_data['Year'].astype(int)
-                country_data['Inflation Rate (%)'] = country_data['Inflation Rate (%)'].astype(float)
+                country_data['Inflation Rate (%)'] = country_data['Inflation Rate (%)'].replace({None: 0}).astype(float)
             except Exception as e:
                 st.error(f"Error processing data for {country}: {e}")
                 return
