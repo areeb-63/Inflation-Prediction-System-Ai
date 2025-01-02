@@ -23,6 +23,9 @@ def main():
         # Load the dataset
         data = pd.read_csv(uploaded_file)
 
+        # Replace blank spaces and NaN values with 0
+        data = data.replace(r'^\s*$', 0, regex=True).fillna(0)
+
         # Display the dataset
         st.subheader("Dataset Overview")
         st.write(data.head())
@@ -40,7 +43,7 @@ def main():
                 country_data = country_data.set_index('country_name').transpose().reset_index()
                 country_data.columns = ['Year', 'Inflation Rate (%)']
                 country_data['Year'] = country_data['Year'].astype(int)
-                country_data['Inflation Rate (%)'] = country_data['Inflation Rate (%)'].replace({None: 0}).astype(float)
+                country_data['Inflation Rate (%)'] = country_data['Inflation Rate (%)'].astype(float)
             except Exception as e:
                 st.error(f"Error processing data for {country}: {e}")
                 return
