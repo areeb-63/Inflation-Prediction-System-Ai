@@ -16,6 +16,15 @@ def main():
     Please upload the dataset in CSV format to get started.
     """)
 
+    # User information input
+    st.sidebar.subheader("User Information")
+    user_name = st.sidebar.text_input("Enter your name:")
+    user_age = st.sidebar.number_input("Enter your age:", min_value=1, step=1)
+    user_email = st.sidebar.text_input("Enter your email:")
+
+    if user_name and user_email:
+        st.sidebar.success(f"Welcome, {user_name}!")
+
     # File upload
     uploaded_file = st.file_uploader("Upload your inflation dataset (CSV format)", type="csv")
 
@@ -137,10 +146,19 @@ def main():
             user_feedback = st.text_area("Please share your feedback or suggestions for improving the app:")
             if user_feedback:
                 st.success("Thank you for your feedback!")
+
         else:
             st.error("The uploaded file does not contain the required columns: 'country_name' and 'indicator_name'.")
     else:
         st.warning("Please upload a CSV file to proceed.")
+
+    # Credits
+    st.sidebar.markdown("""
+    **App Collaborators:**
+    - Muhammad Areeb
+    - Qasim Tahir
+    - Hashaam Amjad
+    """)
 
 if __name__ == "__main__":
     main()
