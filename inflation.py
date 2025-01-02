@@ -36,13 +36,22 @@ def main():
             country_data = data[data['country_name'] == country].drop('indicator_name', axis=1)
 
             # Reshape the data for modeling
-            country_data = country_data.set_index('country_name').transpose().reset_index()
-            country_data.columns = ['Year', 'Inflation Rate (%)']
-            country_data['Year'] = country_data['Year'].astype(int)
-            country_data['Inflation Rate (%)'] = country_data['Inflation Rate (%)'].astype(float)
+            try:
+                country_data = country_data.set_index('country_name').transpose().reset_index()
+                country_data.columns = ['Year', 'Inflation Rate (%)']
+                country_data['Year'] = country_data['Year'].astype(int)
+                country_data['Inflation Rate (%)'] = country_data['Inflation Rate (%)'].astype(float)
+            except Exception as e:
+                st.error(f"Error processing data for {country}: {e}")
+                return
 
             st.subheader(f"Historical Data for {country}")
             st.write(country_data)
+
+            # Check for sufficient data points
+            if country_data.shape[0] < 3:
+                st.error(f"Not enough data points for {country} to train a model.")
+                return
 
             # Prepare features and target
             X = country_data[['Year']]
