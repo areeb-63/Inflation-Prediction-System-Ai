@@ -117,6 +117,28 @@ def main():
             plt.title('Correlation Heatmap')
             st.pyplot(plt)
 
+        # Age input (slider)
+        st.markdown("### Enter Your Age")
+        user_age = st.slider("Select your age:", min_value=18, max_value=100, value=30)
+
+        st.write(f"Your age is {user_age} years old.")
+
+        # User feedback (textarea)
+        st.markdown("### We Value Your Feedback!")
+        user_feedback = st.text_area("Please share your feedback or suggestions for improving the app:")
+        
+        if user_feedback:
+            st.write("Thank you for your feedback!")
+
+        # Option to download predictions as a CSV
+        st.markdown("### Download Predictions")
+        st.download_button(
+            label="Download Prediction Data",
+            data=predictions_df.to_csv(index=False),
+            file_name="inflation_predictions.csv",
+            mime="text/csv"
+        )
+
     else:
         st.warning("Please upload a CSV file to proceed.")
 
