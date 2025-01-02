@@ -79,16 +79,37 @@ def main():
             st.subheader("Future Inflation Predictions")
             st.write(predictions_df)
 
-            # Visualization
+            # Visualization options
             st.subheader("Visualization")
-            plt.figure(figsize=(10, 6))
-            plt.plot(country_data['Year'], country_data['Inflation Rate (%)'], label='Historical Data', marker='o')
-            plt.plot(future_years['Year'], future_predictions, label='Predicted Data', linestyle='--')
-            plt.xlabel('Year')
-            plt.ylabel('Inflation Rate (%)')
-            plt.title(f'Inflation Rate Prediction for {country}')
-            plt.legend()
-            st.pyplot(plt)
+            plot_type = st.selectbox("Select plot type:", ["Line Graph", "Bar Graph", "Correlation Heatmap"])
+
+            if plot_type == "Line Graph":
+                plt.figure(figsize=(10, 6))
+                plt.plot(country_data['Year'], country_data['Inflation Rate (%)'], label='Historical Data', marker='o')
+                plt.plot(future_years['Year'], future_predictions, label='Predicted Data', linestyle='--')
+                plt.xlabel('Year')
+                plt.ylabel('Inflation Rate (%)')
+                plt.title(f'Inflation Rate Prediction for {country}')
+                plt.legend()
+                st.pyplot(plt)
+
+            elif plot_type == "Bar Graph":
+                plt.figure(figsize=(10, 6))
+                plt.bar(country_data['Year'], country_data['Inflation Rate (%)'], label='Historical Data', color='blue')
+                plt.bar(future_years['Year'], future_predictions, label='Predicted Data', color='orange', alpha=0.6)
+                plt.xlabel('Year')
+                plt.ylabel('Inflation Rate (%)')
+                plt.title(f'Inflation Rate Prediction for {country}')
+                plt.legend()
+                st.pyplot(plt)
+
+            elif plot_type == "Correlation Heatmap":
+                numeric_data = country_data[['Year', 'Inflation Rate (%)']]
+                corr_matrix = numeric_data.corr()
+                plt.figure(figsize=(8, 6))
+                sns.heatmap(corr_matrix, annot=True, cmap="coolwarm", fmt=".2f", cbar_kws={'label': 'Correlation'})
+                plt.title('Correlation Heatmap')
+                st.pyplot(plt)
 
             # Option to download predictions as a CSV
             st.markdown("### Download Predictions")
@@ -98,6 +119,12 @@ def main():
                 file_name=f"{country}_inflation_predictions.csv",
                 mime="text/csv"
             )
+
+            # Feedback section
+            st.subheader("Feedback")
+            user_feedback = st.text_area("Please share your feedback or suggestions for improving the app:")
+            if user_feedback:
+                st.success("Thank you for your feedback!")
         else:
             st.error("The uploaded file does not contain the required columns: 'country_name' and 'indicator_name'.")
     else:
