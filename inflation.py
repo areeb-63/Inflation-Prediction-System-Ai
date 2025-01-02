@@ -81,6 +81,7 @@ def main():
             plt.figure(figsize=(10, 6))
             plt.plot(data['Year'], data['Inflation Rate (%)'], color='blue', label='Actual Inflation Rate')
             plt.plot(data['Year'], model.predict(data[['Year']]), color='red', label='Trend Line')
+            plt.scatter(future_years['Year'], future_predictions, color='green', label='Predicted Inflation (Future)')
             plt.xlabel('Year')
             plt.ylabel('Inflation Rate (%)')
             plt.title('Inflation Rate Prediction (Line Graph)')
@@ -138,6 +139,13 @@ def main():
             file_name="inflation_predictions.csv",
             mime="text/csv"
         )
+
+        # Contributor names
+        st.markdown("### Project Contributors")
+        st.write("This project was developed by:")
+        st.write("- **Muhammad Areeb**")
+        st.write("- **Hashaam Amjad**")
+        st.write("- **Muhammad Qasim Tahir**")
 
     else:
         st.warning("Please upload a CSV file to proceed.")
