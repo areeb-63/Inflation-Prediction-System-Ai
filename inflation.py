@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_error, r2_score
 import matplotlib.pyplot as plt
 import seaborn as sns
 import streamlit as st
@@ -79,9 +79,11 @@ def main():
             # Evaluate the model
             y_pred = model.predict(X_test)
             mse = mean_squared_error(y_test, y_pred)
+            r2 = r2_score(y_test, y_pred)
 
             st.subheader("Model Evaluation")
             st.write(f"Mean Squared Error (MSE): {mse:.2f}")
+            st.write(f"R² Score (Accuracy): {r2:.2f}")
 
             # User input for selecting prediction years
             st.markdown("### Predict Future Inflation Rates")
