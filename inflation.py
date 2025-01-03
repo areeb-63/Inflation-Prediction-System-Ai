@@ -91,7 +91,7 @@ def main():
 
             st.subheader("Model Evaluation")
             st.write(f"Mean Squared Error (MSE): {mse:.2f}")
-            st.write(f"R² Score (Accuracy): {r2:.2f}")
+            st.write(f"(Accuracy): {r2:.2f}")
 
             # User input for selecting prediction years
             st.markdown("### Predict Future Inflation Rates")
