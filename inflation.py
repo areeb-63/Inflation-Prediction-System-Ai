@@ -35,9 +35,17 @@ def main():
         # Replace blank spaces and NaN values with 0
         data = data.replace(r'^\s*$', 0, regex=True).fillna(0)
 
-        # Display the dataset
+        # Dataset overview with vertical slider
         st.subheader("Dataset Overview")
-        st.write(data.head())
+        total_rows = data.shape[0]
+        num_rows = st.slider(
+            "Select the number of rows to display:",
+            min_value=5,
+            max_value=total_rows,
+            value=5,
+            step=1
+        )
+        st.write(data.head(num_rows))  # Display the selected number of rows
 
         # Ensure required columns exist
         if 'country_name' in data.columns and 'indicator_name' in data.columns:
@@ -83,7 +91,7 @@ def main():
 
             st.subheader("Model Evaluation")
             st.write(f"Mean Squared Error (MSE): {mse:.2f}")
-            st.write(f"(Accuracy): {r2:.2f}")
+            st.write(f"R² Score (Accuracy): {r2:.2f}")
 
             # User input for selecting prediction years
             st.markdown("### Predict Future Inflation Rates")
